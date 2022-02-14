@@ -1,0 +1,303 @@
+{% unless limit %}
+  {%- assign limit = main_menu.links.size -%}
+{% endunless %}
+{% unless offset %}
+  {%- assign offset = 0 -%}
+{% endunless %}
+
+<ul
+  class="site-nav site-navigation small--hide"
+  {% unless disable_aria %}
+    role="navigation" aria-label="Primary"
+  {% endunless %}>
+  {% for link in main_menu.links limit: limit offset: offset %}
+    {%- assign has_dropdown = false -%}
+    {%- assign is_megamenu = false -%}
+    {% if link.links != blank %}
+      {%- assign has_dropdown = true -%}
+      {% if link.levels > 1 %}
+        {%- assign is_megamenu = true -%}
+      {% endif %}
+    {% endif %}
+  
+  
+  	{% assign mega_menu_item = link.title | downcase  %}
+  
+  
+
+    <li
+      class="site-nav__item site-nav__expanded-item{% if has_dropdown %} site-nav--has-dropdown{% endif %}{% if is_megamenu %} site-nav--is-megamenu{% endif %}"
+      {% if has_dropdown %}aria-haspopup="true"{% endif %}>
+
+      <a href="{{ link.url }}" class="site-nav__link site-nav__link--underline{% if has_dropdown %} site-nav__link--has-dropdown{% endif %}">
+        {{ link.title }}
+      </a>
+      
+      {% if is_megamenu %}
+        {%- assign previous_column_type = '' -%}
+        {%- assign animation_column = 1 -%}
+      
+      {% capture megamenu_1 %}customizable_mega_menu_1{% endcapture %}
+      {% capture megamenu_2 %}customizable_mega_menu_2{% endcapture %}
+      {% capture megamenu_3 %}customizable_mega_menu_3{% endcapture %}
+      {% assign megamenu_1_val = settings[megamenu_1] | downcase %}
+      {% assign megamenu_2_val = settings[megamenu_2] | downcase %}
+      {% assign megamenu_3_val = settings[megamenu_3] | downcase %}
+	
+      {% if megamenu_1_val == mega_menu_item or megamenu_2_val == mega_menu_item  or megamenu_3_val == mega_menu_item %}
+      	
+      	{% for i in (1..2) %}
+      		
+      		{% capture megamenu_item %}customizable_mega_menu_{{i}}{% endcapture %}
+  			{% assign megamenu_val = settings[megamenu_item] | downcase %}
+         	{% if megamenu_val == mega_menu_item %}
+      			
+      			{%capture customizable_mega_menu_image%}customizable_mega_menu_image_{{i}}{%endcapture%}
+      			{%- assign mega_menu_img_url = settings[customizable_mega_menu_image] | img_url: '1024x' -%}
+      			{%capture customizable_mega_menu_heading_1%}customizable_mega_menu_heading_{{i}}_1{%endcapture%}
+      			{%- assign customizable_mega_menu_heading_1 = settings[customizable_mega_menu_heading_1] -%}
+      			{%capture customizable_mega_menu_heading_1_link%}customizable_mega_menu_heading_{{i}}_1_link{%endcapture%}
+      			{%- assign customizable_mega_menu_heading_1_link = settings[customizable_mega_menu_heading_1_link] -%}
+      			
+      			{%capture customizable_mega_menu_heading_2%}customizable_mega_menu_heading_{{i}}_2{%endcapture%}
+      			{%- assign customizable_mega_menu_heading_2 = settings[customizable_mega_menu_heading_2] -%}
+      			{%capture customizable_mega_menu_heading_2_link%}customizable_mega_menu_heading_{{i}}_2_link{%endcapture%}
+      			{%- assign customizable_mega_menu_heading_2_link = settings[customizable_mega_menu_heading_2_link] -%}
+      
+      			{%capture customizable_mega_menu_heading_3%}customizable_mega_menu_heading_{{i}}_3{%endcapture%}
+      			{%- assign customizable_mega_menu_heading_3 = settings[customizable_mega_menu_heading_3] -%}
+      			{%capture customizable_mega_menu_heading_3_link%}customizable_mega_menu_heading_{{i}}_3_link{%endcapture%}
+      			{%- assign customizable_mega_menu_heading_3_link = settings[customizable_mega_menu_heading_3_link] -%}
+      
+      			 <div class="site-nav__dropdown megamenu megamenu_custom text-left {{link.title}}">
+                  <div class="page-width">
+
+                    <div class="grid{% if dropdown_alignment == 'center' %} grid--center{% endif %}">
+
+                      <div class="grid__item medium-up--one-quarter appear-animation appear-delay-{{ animation_column }}">
+                           {%- assign animation_column = animation_column | plus: 1 -%}
+                        <div class="brands_left_wrapper" style="background-image:linear-gradient( rgb(49 55 61 / 45%), rgb(49 55 61 / 45%) ),url('{{ mega_menu_img_url }}');">
+
+
+                          <div class="brands_browser_wrapper">
+                             <h3><a href="{{ customizable_mega_menu_heading_1_link }}">{{ customizable_mega_menu_heading_1  }}</a></h3>
+                             <h4><a href="{{ customizable_mega_menu_heading_2_link }}">{{ customizable_mega_menu_heading_2 }}</a></h4>
+                          </div>
+
+                          <div class="logo_wrapper">
+                            <a href="/" itemprop="url" class="site-header__logo-link">
+                              <img src="//cdn.shopify.com/s/files/1/0935/0236/files/logo_180x.png?v=1590288573" srcset="//cdn.shopify.com/s/files/1/0935/0236/files/logo_180x.png?v=1590288573 1x, //cdn.shopify.com/s/files/1/0935/0236/files/logo_180x@2x.png?v=1590288573 2x" alt="White &amp; Co">
+                            </a>
+                          </div>
+
+                          <div class="brands_browser_wrapper_second">
+                            <h3><a href="{{ customizable_mega_menu_heading_3_link }}">{{ customizable_mega_menu_heading_3 }}</a></h3>
+                          </div>
+                        </div>
+                      </div>
+                      
+					{% assign is_brand_list = false %}
+                    {% for childlink in link.links %}{%- assign mega_menu_item_heading = childlink.title | downcase -%}{% if mega_menu_item_heading == 'all brands' %}{% assign is_brand_list = true %}{% endif %}{% endfor %}
+
+                    <div class="grid__item medium-up--one-{% if is_brand_list %}half{% else %}fifth{% endif %} appear-animation appear-delay-{{ animation_column }}">
+                      
+                      {% if is_brand_list %}<div class="brands_list_wrapper">{% endif %}
+                        {%- assign animation_column = animation_column | plus: 1 -%}
+
+                        {% for childlink in link.links %}
+                          {%- assign create_new_column = false -%}
+
+                          {% if childlink.levels > 0 and forloop.index != 1 %}
+                            {%- assign create_new_column = true -%}
+                          {% endif %}
+
+                          {% if childlink.levels == 0 and previous_column_type == 'full' %}
+                            {%- assign create_new_column = true -%}
+                          {% endif %}
+
+                          {% if create_new_column %}
+                            </div><div class="grid__item medium-up--one-fifth appear-animation appear-delay-{{ animation_column }}">
+                            {%- assign animation_column = animation_column | plus: 1 -%}
+                          {% endif %}
+
+                          {%- assign subcollection_drop = false -%}
+                          {% if childlink.levels > 0 and childlink.url contains '/collections/' %}
+                            {%- assign lang_code_string = request.locale.iso_code | prepend: '/' -%}
+                            {%- assign subcollection_handle = childlink.url | remove: '/collections/' | remove: lang_code_string -%}
+                            {%- assign subcollection_drop = collections[subcollection_handle] -%}
+                            {% if subcollection_drop.image != blank %}
+                              <a
+                                href="{{ childlink.url }}"
+                                class="megamenu__colection-image"
+                                style="background-image: url({{ collections[subcollection_handle].image | img_url: '400x' }})"></a>
+                            {% endif %}
+                          {% endif %}
+
+                          <div class="h5">
+                            <a href="{{ childlink.url }}" class="site-nav__dropdown-link site-nav__dropdown-link--top-level">{{ childlink.title }}</a>
+                          </div>
+
+                          {% if childlink.levels > 0 %}
+                            {%- assign previous_column_type = 'full' -%}
+                          {% else %}
+                            {%- assign previous_column_type = 'single' -%}
+                          {% endif %}
+
+                          {% for grandchildlink in childlink.links %}
+                            <div class="{% if grandchildlink.title contains '-' %}h5{% endif %}">
+                              <a href="{{ grandchildlink.url }}" class="site-nav__dropdown-link {% if grandchildlink.title contains '-' %}  site-nav__dropdown-link--top-level{% endif %}">
+                                {{grandchildlink.title}}
+                              </a>
+                            </div>
+                          {% endfor %}
+                        {% endfor %}
+                      {% if is_brand_list %}</div>{% endif %}
+                    </div>
+                    </div>
+                  </div>
+                </div>
+      		{% endif %}
+      	{% endfor %}
+      {% else %}
+      	
+      	<div class="site-nav__dropdown megamenu text-left">
+          <div class="page-width">
+             {% for childlink in link.links %}
+                   {%- assign create_new_first_column = false -%}
+       			   {%- assign create_new_last_column = false -%}		
+                   {% if childlink.title == '_latest_blog_' and forloop.first %}
+                      {%- assign create_new_first_column = true -%}
+            		  {% break %}
+                   {% endif %}
+            	   
+           		   {% if childlink.title == '_latest_blog_' and forloop.last %}
+                      {%- assign create_new_last_column = true -%}
+            		  {% break %}
+                   {% endif %}
+            
+             {% endfor %}
+            <div class="grid{% if dropdown_alignment == 'center' %} grid--center{% endif %}">
+              
+               {% if create_new_first_column %}
+                <div class="blog_grid grid__item medium-up--one-quarter appear-animation appear-delay-{{ animation_column }}">
+                    {%- assign animation_column = animation_column | plus: 1 -%}
+                    <div class="h5">
+                      <a href="#">Latest</a>
+                    </div>
+                    {%for article in blogs.blog.articles limit: 1   %}
+                      {%- assign blog_img_url = article.image | img_url: '1024x' -%}
+                      <div class="brands_right_wrapper" style="background-image:url('{{ blog_img_url }}');">
+                      </div>
+                      <div class="h5 article_title">
+                        <a href="{{ article.url }}">{{ article.title }}</a>
+                      </div>  
+                    {% endfor %}
+                </div>
+              {% endif %}
+              
+              <div class="grid__item medium-up--one-fifth appear-animation appear-delay-{{ animation_column }}"  style="{% if create_new_first_column %}display:none;{% endif %}">
+                {%- assign animation_column = animation_column | plus: 1 -%}
+
+                {% for childlink in link.links %}
+                  {%- assign create_new_column = false -%}
+
+                  {% if childlink.levels > 0 and forloop.index != 1 %}
+                    {%- assign create_new_column = true -%}
+                  {% endif %}
+
+                  {% if childlink.levels == 0 and previous_column_type == 'full' %}
+                    {%- assign create_new_column = true -%}
+                  {% endif %}
+
+                  {% if create_new_column %}
+                    </div><div class="grid__item medium-up--one-fifth appear-animation appear-delay-{{ animation_column }}" style="{% if create_new_last_column and forloop.last  %}display:none;{% endif %}">
+                    {%- assign animation_column = animation_column | plus: 1 -%}
+                  {% endif %}
+
+                  {%- assign subcollection_drop = false -%}
+                  {% if childlink.levels > 0 and childlink.url contains '/collections/' %}
+                    {%- assign lang_code_string = request.locale.iso_code | prepend: '/' -%}
+                    {%- assign subcollection_handle = childlink.url | remove: '/collections/' | remove: lang_code_string -%}
+                    {%- assign subcollection_drop = collections[subcollection_handle] -%}
+                    {% if subcollection_drop.image != blank %}
+                      <a
+                        href="{{ childlink.url }}"
+                        class="megamenu__colection-image"
+                        style="background-image: url({{ collections[subcollection_handle].image | img_url: '400x' }})"></a>
+                    {% endif %}
+                  {% endif %}
+
+                  <div class="h5">
+                    <a href="{{ childlink.url }}" class="site-nav__dropdown-link site-nav__dropdown-link--top-level">{{ childlink.title }}</a>
+                  </div>
+
+                  {% if childlink.levels > 0 %}
+                    {%- assign previous_column_type = 'full' -%}
+                  {% else %}
+                    {%- assign previous_column_type = 'single' -%}
+                  {% endif %}
+
+                  {% for grandchildlink in childlink.links %}
+                    <div>
+                      <a href="{{ grandchildlink.url }}" class="site-nav__dropdown-link">
+                        {{grandchildlink.title}}
+                      </a>
+                    </div>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+              
+              {% if create_new_last_column %}
+                <div class="blog_grid grid__item medium-up--one-quarter appear-animation appear-delay-{{ animation_column }}">
+                    {%- assign animation_column = animation_column | plus: 1 -%}
+                    <div class="h5">
+                      <a href="#">Latest</a>
+                    </div>
+                    {%for article in blogs.blog.articles limit: 1   %}
+                      {%- assign blog_img_url = article.image | img_url: '1024x' -%}
+                      <div class="brands_right_wrapper" style="background-image:url('{{ blog_img_url }}');">
+                      </div>
+                      <div class="h5 article__title">
+                        <a href="{{ article.url }}" >{{ article.title }}</a>
+                      </div>  
+                    {% endfor %}
+                </div>
+              {% endif %}
+              
+            </div>
+          </div>
+        </div>
+            
+      {% endif %}
+		
+      {% elsif has_dropdown %}
+        <ul class="site-nav__dropdown text-left">
+          {% for childlink in link.links %}
+            {%- assign has_sub_dropdown = false -%}
+            {% if childlink.links != blank %}
+              {%- assign has_sub_dropdown = true -%}
+            {% endif %}
+
+            <li class="{% if has_sub_dropdown %} site-nav__deep-dropdown-trigger{% endif %}">
+              <a href="{{ childlink.url }}" class="site-nav__dropdown-link site-nav__dropdown-link--second-level {% if has_sub_dropdown %} site-nav__dropdown-link--has-children{% endif %}">
+                {{ childlink.title | escape }}
+                {% if has_sub_dropdown %}
+                  <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--wide icon-chevron-down" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none" fill-rule="evenodd"/></svg>
+                {% endif %}
+              </a>
+              {% if has_sub_dropdown %}
+                <ul class="site-nav__deep-dropdown">
+                  {% for grandchildlink in childlink.links %}
+                    <li>
+                      <a href="{{ grandchildlink.url }}" class="site-nav__dropdown-link">{{ grandchildlink.title | escape }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
